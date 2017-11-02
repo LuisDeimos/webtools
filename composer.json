@@ -1,0 +1,20 @@
+{
+    "name": "luisdeimos/webtools",
+    "description": "Basic tools for a web environment.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Luis Manuel Ramírez DEIMOS",
+            "email": "deimosdk@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "files": ["autoload.php"]
+    },
+    "require": {
+        "php": "^7.0",
+        "symfony/yaml": "^3.3",
+        "swiftmailer/swiftmailer": "^6.0"
+    }
+}
