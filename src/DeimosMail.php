@@ -18,12 +18,14 @@ final class DeimosMail
     private $userPass;
     private $domain;
     private $port;
+    private $encryption;
 
     /**
      * DeimosMail constructor.
-     * @throws Exception
+     * @param string $config
+     * @throws \Exception
      */
-    public function __construct()
+    public function __construct($config = 'deimos_mail')
     {
         if (!file_exists($this->yaml)) {
             throw new \Exception(sprintf('You must first create and configure the %s file configuration.', $this->yaml));
@@ -31,14 +33,15 @@ final class DeimosMail
 
         $data = Yaml::parse(file_get_contents($this->yaml));
 
-        if (!array_key_exists('deimos_mail', $data)) {
+        if (!array_key_exists($config, $data)) {
             throw new \Exception(sprintf('You must first configure the %s file configuration.', $this->yaml));
         }
 
-        $this->userEmail = $data['deimos_mail']['email'];
-        $this->userPass = $data['deimos_mail']['password'];
-        $this->domain = $data['deimos_mail']['domain'];
-        $this->port = $data['deimos_mail']['port'];
+        $this->userEmail = $data[$config]['email'];
+        $this->userPass = $data[$config]['password'];
+        $this->domain = $data[$config]['domain'];
+        $this->port = $data[$config]['port'];
+        $this->encryption = array_key_exists('encryption', $data[$config]) ? $data[$config]['encryption'] : null;
 
     }
 
@@ -91,7 +94,7 @@ final class DeimosMail
      */
     public function send()
     {
-        $transport = (new \Swift_SmtpTransport($this->domain, $this->port))
+        $transport = (new \Swift_SmtpTransport($this->domain, $this->port, $this->encryption))
             ->setUsername($this->userEmail)
             ->setPassword($this->userPass);
 
